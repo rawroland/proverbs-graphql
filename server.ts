@@ -13,15 +13,17 @@ const typeDefs: string = `
   }
 
   type Proverb {
-    uuid: String!
+    uuid: ID!
     title: String!
     meaning: String!
+    reviewers: [User!]!
   }
 
   type User {
-    uuid: String!
+    uuid: ID!
     name: String!
     surname: String!
+    reviewed_proverbs: [Proverb!]!
   }
 `;
 
@@ -30,6 +32,13 @@ const users: User[] = [
     uuid: uuid(),
     name: 'Roland',
     surname: 'Awemo',
+    reviewed_proverbs: [],
+  },
+  {
+    uuid: uuid(),
+    name: 'Jane',
+    surname: 'Doe',
+    reviewed_proverbs: [],
   },
 ];
 
@@ -38,13 +47,18 @@ const proverbs: Proverb[] = [
     uuid: uuid(),
     title: 'All is well that ends well',
     meaning: 'A happy ending makes up for everything that has gone before.',
+    reviewers: [users[0].uuid],
   },
   {
     uuid: uuid(),
     title: 'Penny wise and a pound foolish',
-    meaning: ' Prudent and thrifty with small amounts of money, but wasteful and profligate with large amounts.',
+    meaning: 'Prudent and thrifty with small amounts of money, but wasteful and profligate with large amounts.',
+    reviewers: [users[0].uuid, users[1].uuid],
   },
 ];
+
+users[0].reviewed_proverbs = [proverbs[0].uuid, proverbs[1].uuid];
+users[1].reviewed_proverbs = [proverbs[0].uuid];
 
 const resolvers: any = {
   Query: {
@@ -58,6 +72,16 @@ const resolvers: any = {
       return users;
     },
   },
+  Proverb: {
+    reviewers(proverb: Proverb, args: any, context: any, info: any): User[] {
+      return users.filter((user: User): boolean => proverb.reviewers.includes(user.uuid));
+    },
+  },
+  User: {
+    reviewed_proverbs(user: User, args: any, context: any, info: any): Proverb[] {
+      return proverbs.filter((proverb: Proverb): boolean => user.reviewed_proverbs.includes(proverb.uuid));
+    },
+  },
   Mutation: {
     createProverb(parent: any, args: any, context: any, info: any): Proverb {
       const proverbExists = proverbs.find(proverb => proverb.title.toLowerCase() === args.title.toLowerCase());
@@ -68,7 +92,8 @@ const resolvers: any = {
       const proverb: Proverb = {
         uuid: uuid(),
         title: args.title,
-        meaning: args.meaning
+        meaning: args.meaning,
+        reviewers: [],
       };
       proverbs.push(proverb);
 
