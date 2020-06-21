@@ -2,27 +2,6 @@ import { GraphQLServer } from 'graphql-yoga';
 import { Proverb, User } from './src/types';
 import { v4 as uuid } from 'uuid';
 
-const users: User[] = [
-  {
-    uuid: uuid(),
-    name: 'Roland',
-    surname: 'Awemo',
-  },
-];
-
-const proverbs: Proverb[] = [
-  {
-    uuid: uuid(),
-    title: 'All is well that ends well',
-    meaning: 'A happy ending makes up for everything that has gone before.',
-  },
-  {
-    uuid: uuid(),
-    title: 'Penny wise and a pound foolish',
-    meaning: ' Prudent and thrifty with small amounts of money, but wasteful and profligate with large amounts.',
-  },
-];
-
 const typeDefs: string = `
   type Query {
     proverbs(query: String): [Proverb]!
@@ -45,6 +24,27 @@ const typeDefs: string = `
     surname: String!
   }
 `;
+
+const users: User[] = [
+  {
+    uuid: uuid(),
+    name: 'Roland',
+    surname: 'Awemo',
+  },
+];
+
+const proverbs: Proverb[] = [
+  {
+    uuid: uuid(),
+    title: 'All is well that ends well',
+    meaning: 'A happy ending makes up for everything that has gone before.',
+  },
+  {
+    uuid: uuid(),
+    title: 'Penny wise and a pound foolish',
+    meaning: ' Prudent and thrifty with small amounts of money, but wasteful and profligate with large amounts.',
+  },
+];
 
 const resolvers: any = {
   Query: {
