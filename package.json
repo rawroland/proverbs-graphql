@@ -4,17 +4,25 @@
   "description": "A graphql backend for proverbs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./dist/server.js",
+    "start:watch": "tsc-watch --onSuccess \"node ./dist/server.js\" --onFailure \"echo Compilation Failed!\"",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx ./ && echo 'Lint completed'",
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix ./ && echo 'Lint fix completed'"
   },
   "author": "Roland Awemo <rawroro@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "@types/node": "^14.0.13",
+    "graphql-yoga": "^1.18.3",
     "typescript": "^3.9.5",
+    "uuid": "^8.1.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
+    "@types/uuid": "^8.0.0",
+    "@types/ws": "^7.2.5",
     "eslint": "^7.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
