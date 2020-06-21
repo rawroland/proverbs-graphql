@@ -9,7 +9,12 @@ const typeDefs: string = `
   }
 
   type Mutation {
-    createProverb(title: String!, meaning: String!): Proverb!
+    createProverb(proverb: CreateProverbInput!): Proverb!
+  }
+
+  input CreateProverbInput {
+    title: String!
+    meaning: String!
   }
 
   type Proverb {
@@ -84,15 +89,19 @@ const resolvers: any = {
   },
   Mutation: {
     createProverb(parent: any, args: any, context: any, info: any): Proverb {
-      const proverbExists = proverbs.find(proverb => proverb.title.toLowerCase() === args.title.toLowerCase());
+      let proverbInput = args.proverb;
+      const proverbExists = proverbs
+        .find((proverb: Proverb): boolean => {
+          return proverb.title.toLowerCase() === proverbInput.title.toLowerCase();
+        });
       if (proverbExists) {
-        throw new Error(`Proverb with the title '${args.title}' already exists.`);
+        throw new Error(`Proverb with the title '${proverbInput.title}' already exists.`);
       }
 
       const proverb: Proverb = {
         uuid: uuid(),
-        title: args.title,
-        meaning: args.meaning,
+        title: proverbInput.title,
+        meaning: proverbInput.meaning,
         reviewers: [],
       };
       proverbs.push(proverb);
