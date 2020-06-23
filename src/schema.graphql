@@ -1,0 +1,27 @@
+type Query {
+  proverbs(query: String): [Proverb]!
+  users: [User!]!
+}
+
+type Mutation {
+  createProverb(proverb: CreateProverbInput!): Proverb!
+}
+
+input CreateProverbInput {
+  title: String!
+  meaning: String!
+}
+
+type Proverb {
+  uuid: ID!
+  title: String!
+  meaning: String!
+  reviewers: [User!]!
+}
+
+type User {
+  uuid: ID!
+  name: String!
+  surname: String!
+  reviewed_proverbs: [Proverb!]!
+}
