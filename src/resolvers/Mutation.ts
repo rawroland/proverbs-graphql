@@ -1,4 +1,4 @@
-import { Proverb } from '../types';
+import { Proverb, User } from '../types';
 import { v4 as uuid } from 'uuid';
 
 const Mutation = {
@@ -22,6 +22,23 @@ const Mutation = {
     proverbs.push(proverb);
 
     return proverb;
+  },
+  createUser(parent: any, { user: userInput }: { user: User }, { db }: any, info: any): User {
+    const { users }: { users: User[] } = db;
+    const userAlreadyExists = users.find((user: User): boolean => {
+      return userInput.name === user.name && userInput.surname === user.surname;
+    });
+    if (userAlreadyExists) {
+      throw new Error(`User '${userInput.name} ${userInput.surname}' already exists.`);
+    }
+    const user: User = {
+      ...userInput,
+      uuid: uuid(),
+      reviewed_proverbs: [],
+    };
+    users.push(user);
+
+    return user;
   },
 };
 

@@ -5,11 +5,17 @@ type Query {
 
 type Mutation {
   createProverb(proverb: CreateProverbInput!): Proverb!
+  createUser(user: CreateUserInput!): User!
 }
 
 input CreateProverbInput {
   title: String!
   meaning: String!
+}
+
+input CreateUserInput {
+  name: String!
+  surname: String!
 }
 
 type Proverb {
